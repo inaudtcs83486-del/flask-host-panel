@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mr.Ghost Hosting Panel</title>
+    <meta charset="utf-8">
+
+    <style>
+        body {
+            background: #0d0d0d;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ffcc;
+        }
+
+        .box {
+            border: 1px solid #333;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #151515;
+        }
+
+        button {
+            padding: 7px 14px;
+            margin: 3px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .run { background: #1abc9c; color: black; }
+        .stop { background: #e74c3c; color: white; }
+        .restart { background: #f39c12; color: black; }
+        .delete { background: #555; color: white; }
+
+        pre {
+            background: black;
+            color: #00ff00;
+            padding: 10px;
+            height: 220px;
+            overflow-y: auto;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .status-running {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .status-stopped {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        .upload-box {
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>👻 Mr.Ghost Hosting Panel</h1>
+
+<div class="upload-box">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".zip">
+        <button type="submit">📤 Upload ZIP</button>
+    </form>
+</div>
+
+{% for app in apps %}
+<div class="box">
+
+    <h3>
+        {{ app.name }} —
+        {% if app.running %}
+            <span class="status-running">RUNNING</span>
+        {% else %}
+            <span class="status-stopped">STOPPED</span>
+        {% endif %}
+    </h3>
+
+    <div>
+        <a href="/run/{{ app.name }}"><button class="run">▶ Run</button></a>
+        <a href="/stop/{{ app.name }}"><button class="stop">🛑 Stop</button></a>
+        <a href="/restart/{{ app.name }}"><button class="restart">🔄 Restart</button></a>
+
+        <a href="/delete/{{ app.name }}"
+           onclick="return confirm('Are you sure? This app will be permanently deleted!')">
+            <button class="delete">🗑 Delete</button>
+        </a>
+    </div>
+
+    <h4>📟 Live Console</h4>
+    <pre>{{ app.log }}</pre>
+
+</div>
+{% endfor %}
+
+</body>
+</html>
